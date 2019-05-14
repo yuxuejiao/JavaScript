@@ -10,7 +10,7 @@ promise可以从pending->fulfilled，也可以从pending->rejected。一旦状�
 var p = new Promise(function(resolve, reject){
     // 异步操作
     if(异步操作成功){
-        resolve(data); //改变promise对象的状态，从而调用then中绑定的处理方法 这里的resolve并不是异步成功的调用函数
+        resolve(data); //改变promise对象的状态，从而调用then中绑定的处理方法
     }else{
         reject(error); //该表promise对象的状态，从而调用then中绑定的处理方法
     }
@@ -18,7 +18,9 @@ var p = new Promise(function(resolve, reject){
 
 使用new + Promise构造函数来创建对象，传参为executor函数（处理器函数）。Promise构造函数执行时，立即调用executor函数。
 executor函数有两个传参resolve函数和reject函数。resolve和reject函数被调用时，分别将promise的状态从pending改为fulfilled或rejected。
-executor 内部通常会执行一些异步操作，一旦异步操作执行完毕(可能成功/失败)，要么调用resolve函数来将promise状态改成fulfilled，要么调用reject函数将promise的状态改为rejected。如果在executor函数中抛出一个错误，那么该promise 状态为rejected。executor函数的返回值被忽略。
+executor内部通常会执行一些异步操作，一旦异步操作执行完毕(可能成功/失败)，要么调用resolve函数来将promise状态改成fulfilled，
+要么调用reject函数将promise的状态改为rejected。
+如果在executor函数中抛出一个错误，那么该promise 状态为rejected。executor函数的返回值被忽略。
 ```
 ### .then方法
 ```
@@ -35,9 +37,9 @@ then方法为当前的promise对象绑定了resolve和reject函数，返回一�
 * 如果then中的回调函数返回一个值，那么then返回的Promise将会成为接受状态，并且将返回的值作为接受状态的回调函数的参数值。
 * 如果then中的回调函数没有返回值，那么then返回的Promise将会成为接受状态，并且该接受状态的回调函数的参数值为 undefined。
 * 如果then中的回调函数抛出一个错误，那么then返回的Promise将会成为拒绝状态，并且将抛出的错误作为拒绝状态的回调函数的参数值。
-* 如果then中的回调函数返回一个已经是接受状态的Promise，那么then返回的Promise也会成为接受状态，并且将那个Promise的接受状态的回调函数的参数值作为该被返回的      Promise的接受状态回调函数的参数值。
-* 如果then中的回调函数返回一个已经是拒绝状态的Promise，那么then返回的Promise也会成为拒绝状态，并且将那个Promise的拒绝状态的回调函数的参数值作为该被返回的      Promise的拒绝状态回调函数的参数值。
-* 如果then中的回调函数返回一个未定状态（pending）的Promise，那么then返回Promise的状态也是未定的，并且它的终态与那个Promise的终态相同；同时，它变为终态时调用   的回调函数参数与那个Promise变为终态时的回调函数的参数是相同的。
+* 如果then中的回调函数返回一个已经是接受状态的Promise，那么then返回的Promise也会成为接受状态，并且将那个Promise的接受状态的回调函数的参数值作为该被返回的Promise的接受状态回调函数的参数值。
+* 如果then中的回调函数返回一个已经是拒绝状态的Promise，那么then返回的Promise也会成为拒绝状态，并且将那个Promise的拒绝状态的回调函数的参数值作为该被返回的Promise的拒绝状态回调函数的参数值。
+* 如果then中的回调函数返回一个未定状态（pending）的Promise，那么then返回Promise的状态也是未定的，并且它的终态与那个Promise的终态相同；同时，它变为终态时调用的回调函数参数与那个Promise变为终态时的回调函数的参数是相同的。
 
 ### .resolve方法
 ```
@@ -84,7 +86,7 @@ promise.then(function(data) {
     console.log('error', error);
 });
 
-.catch相当于.then(undefined, onRejected)
+.catch相当于.then(undefined/null, onRejected)
 
 var promise = new Promise(function (resolve, reject) {
     throw new Error('test');
@@ -99,7 +101,8 @@ promise.catch(function (error) {
 });
 
 reject方法的作用，相当于抛错。
-promise对象的错误，会一直向后传递，直到被捕获。即错误总会被下一个catch所捕获。then方法指定的回调函数，若抛出错误，也会被下一个catch捕获。catch中也能抛错，则需要后面的catch来捕获。
+promise对象的错误，会一直向后传递，直到被捕获。即错误总会被下一个catch所捕获。then方法指定的回调函数，若抛出错误，也会被下一个catch捕获。
+catch中也能抛错，则需要后面的catch来捕获。
 如果没有使用catch方法指定处理错误的回调函数，Promise对象抛出的错误不会传递到外层代码，即不会有任何反应（Chrome会抛错)。
 
 ```
@@ -164,5 +167,6 @@ promise状态一旦改变了，就不会再发生变化。因为promise resolve�
 
 ### promise vs 回调函数
 * 回调层层嵌套，promise链式调用，将异步操作以同步操作流程表示，易于编程和理解。
-* promise一定是异步的，无论其状态变更是同步还是异步的，then中绑定的回调一定是在同段代码中的同步代码执行后调用。从而调用的时间比较可控，不存在回调函数中回调时间过早还是过晚的问题。
+* promise一定是异步的，无论其状态变更是同步还是异步的，then中绑定的回调一定是在同段代码中的同步代码执行后调用。从而调用的时间比较可控，
+  不存在回调函数中回调时间过早还是过晚的问题。
 * promise一定会执行且执行一次。而回调函数不一定会执行，并且有可能会多次执行。
