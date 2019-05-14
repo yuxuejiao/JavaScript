@@ -16,10 +16,12 @@ var p = new Promise(function(resolve, reject){
     }
 } /* executor函数 */)
 
-使用new + Promise构造函数来创建对象，传参为executor函数（处理器函数）。Promise构造函数执行时，立即调用executor函数。
-executor函数有两个传参resolve函数和reject函数。resolve和reject函数被调用时，分别将promise的状态从pending改为fulfilled或rejected。
-executor内部通常会执行一些异步操作，一旦异步操作执行完毕(可能成功/失败)，要么调用resolve函数来将promise状态改成fulfilled，
-要么调用reject函数将promise的状态改为rejected。
+使用new + Promise构造函数来创建对象，传参为executor函数（处理器函数）。
+Promise构造函数执行时，立即调用executor函数。
+executor函数有两个传参resolve函数和reject函数。
+resolve和reject函数被调用时，分别将promise的状态从pending改为fulfilled或rejected。
+executor内部通常会执行一些异步操作，一旦异步操作执行完毕(可能成功/失败)，
+要么调用resolve函数来将promise状态改成fulfilled，要么调用reject函数将promise的状态改为rejected。
 如果在executor函数中抛出一个错误，那么该promise 状态为rejected。executor函数的返回值被忽略。
 ```
 ### .then方法
@@ -30,7 +32,8 @@ p.then(function(data){
     // onRejected函数
 })
 
-当在executor函数中执行resolve或reject函数，改变了promise对象的状态。此时会调用then中绑定的相应处理方法。
+当在executor函数中执行resolve或reject函数，改变了promise对象的状态。
+此时会调用then中绑定的相应处理方法。
 then方法为当前的promise对象绑定了resolve和reject函数，返回一个新的promise，将以回调的返回值来resolve。
 ```
 ### 链式调用中then方法回调函数的返回值
@@ -56,7 +59,8 @@ console.log('111');
 
 // 先输出 111， 再输出 success
 
-Promise.resolve可以接收除promise对象之外的简单值，带有then方法的对象这些值。返回的是一个新的promise对象，因此可以用.then方法。 
+Promise.resolve可以接收除promise对象之外的简单值，带有then方法的对象这些值。
+返回的是一个新的promise对象，因此可以用.then方法。 
 Promise.resolve会立即进入resolved状态，但是then还是异步输出。
 
 ```
@@ -101,7 +105,8 @@ promise.catch(function (error) {
 });
 
 reject方法的作用，相当于抛错。
-promise对象的错误，会一直向后传递，直到被捕获。即错误总会被下一个catch所捕获。then方法指定的回调函数，若抛出错误，也会被下一个catch捕获。
+promise对象的错误，会一直向后传递，直到被捕获。即错误总会被下一个catch所捕获。
+then方法指定的回调函数，若抛出错误，也会被下一个catch捕获。
 catch中也能抛错，则需要后面的catch来捕获。
 如果没有使用catch方法指定处理错误的回调函数，Promise对象抛出的错误不会传递到外层代码，即不会有任何反应（Chrome会抛错)。
 
